@@ -79,3 +79,91 @@ YAML and playbook:
 YAML stands for "YAML Ain't Markup Language" and it is a human-readable data serialization format that is often used for configuration files, data exchange, and other applications where human readability is desired. In Ansible, YAML is used for writing playbooks.
 
 A playbook in Ansible is a set of instructions that describe the tasks to be performed by Ansible on a group of hosts. Playbooks are written in YAML and contain a series of tasks that are executed in sequence. Each task defines a set of actions to be performed on a specific host or group of hosts. Playbooks can be used to automate the deployment and management of infrastructure resources, as well as the configuration of applications and services.
+
+### Steps to set up Ansible
+
+Need a scrip to launch controller virtual machine.
+
+Head over to visual studio code:
+- cd to the relevant folder
+- type vagrant init - which will create a vagrant file
+- update the vagrant file:
+```
+# ansible-tech201
+
+
+# -*- mode: ruby -*-
+ # vi: set ft=ruby :
+ 
+ # All Vagrant configuration is done below. The "2" in Vagrant.configure
+ # configures the configuration version (we support older styles for
+ # backwards compatibility). Please don't change it unless you know what
+ 
+ # MULTI SERVER/VMs environment 
+ #
+ Vagrant.configure("2") do |config|
+ # creating are Ansible controller
+   config.vm.define "controller" do |controller|
+     
+    controller.vm.box = "bento/ubuntu-18.04"
+    
+    controller.vm.hostname = 'controller'
+    
+    controller.vm.network :private_network, ip: "192.168.33.12"
+    
+    # config.hostsupdater.aliases = ["development.controller"] 
+    
+   end 
+ # creating first VM called web  
+   config.vm.define "web" do |web|
+     
+     web.vm.box = "bento/ubuntu-18.04"
+    # downloading ubuntu 18.04 image
+ 
+     web.vm.hostname = 'web'
+     # assigning host name to the VM
+     
+     web.vm.network :private_network, ip: "192.168.33.10"
+     #   assigning private IP
+     
+     #config.hostsupdater.aliases = ["development.web"]
+     # creating a link called development.web so we can access web page with this link instread of an IP   
+         
+   end
+   
+ # creating second VM called db
+   config.vm.define "db" do |db|
+     
+     db.vm.box = "bento/ubuntu-18.04"
+     
+     db.vm.hostname = 'db'
+     
+     db.vm.network :private_network, ip: "192.168.33.11"
+     
+     #config.hostsupdater.aliases = ["development.db"]     
+   end
+ 
+ 
+ end
+```
+
+- type the following into terminal: ```vagrant up```
+- type ```vagrant status``` - to see if the different vms are running
+- go to gitbash and type: vagrant ssh controller [do this for all vms]
+- once you have logged into the vm:
+```
+sudo apt update -y
+sudo apt upgrade -y
+env [should see USER=vagrant]
+sudo ansible --version
+python --version
+sudo apt install software-properties-common
+sudo apt-add-repository ppa:ansible/ansible [ go to location and download it - this is specifically for anseible ]
+sudo apt update -y
+sudo apt install ansible 
+sudo ansible --version
+ssh vagrant@192.168.33.10 [this enables you to ssh into the web vm]
+password: vagrant
+exit
+pwd
+```
