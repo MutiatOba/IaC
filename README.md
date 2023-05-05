@@ -149,21 +149,21 @@ Head over to visual studio code:
 
 - type the following into terminal: ```vagrant up```
 - type ```vagrant status``` - to see if the different vms are running
-- go to gitbash and type: vagrant ssh controller [do this for all vms]
+- go to gitbash and type: vagrant ssh controller [do this for web and db vms]
 - once you have logged into the vm:
 ```
 sudo apt update -y
 sudo apt upgrade -y
 env [should see USER=vagrant]
-sudo ansible --version
+sudo ansible --version [this hasnt been installed yet, so should say that it doesnt exists]
 python --version
 sudo apt install software-properties-common
 sudo apt-add-repository ppa:ansible/ansible [ go to location and download it - this is specifically for anseible ]
 sudo apt update -y
 sudo apt install ansible 
 sudo ansible --version
-ssh vagrant@192.168.33.10 [this enables you to ssh into the web vm]
+ssh vagrant@192.168.33.10 [this enables you to ssh into the web vm from the controller vm]
 password: vagrant
-exit
+exit [to exit the web vm]
 pwd
 ```
