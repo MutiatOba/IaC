@@ -219,3 +219,13 @@ then exit
 sudo ansible web -m ping
 should get a successful result 
 
+configure for the db vm
+sudo nano hosts
+[web]
+192.168.33.11 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+
+need to update the config file and make the following update under [defaults]. sudo nano ansible.cfg, then type this in 
+
+host_key_checking = false
+
+sudo ansible all -m ping
