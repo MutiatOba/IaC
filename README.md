@@ -167,3 +167,5 @@ password: vagrant
 exit [to exit the web vm]
 pwd
 ```
+<img width="356" alt="image" src="https://github.com/MutiatOba/IaC/assets/118978642/a95fbc51-7e5e-4db6-95e4-3c24ecdacf0b">
+
