@@ -255,27 +255,28 @@ sudo nano install n-ginx-playbook.yml
 
 content of the file:
 ```
-# creating a playbook to install nginx in websever
+`# creating a playbook to install nginx in websever
 
-# yaml file starts with ---
+`# yaml file starts with ---
 ---
-# where would you like to install nginx
+`# where would you like to install nginx
 
 - hosts: web
 
-# would you like to see logs
+`# would you like to see logs
   gather_facts: yes
 
-# do you need admin access - sudo
+`# do you need admin access - sudo
   become: true
 
-# add the instruction - commands
+`# add the instruction - commands
   tasks:
   - name: Install nginx in web-server
 
     apt: pkg=nginx state=present
-# ensure status is running active
+`# ensure status is running active
 ```
+
 
 to run the command: sudo ansible-playbook install-nginx-playbook.yml
 
