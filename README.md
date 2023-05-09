@@ -169,63 +169,77 @@ pwd
 ```
 <img width="356" alt="image" src="https://github.com/MutiatOba/IaC/assets/118978642/a95fbc51-7e5e-4db6-95e4-3c24ecdacf0b">
 
-Ansible default dir structure
-/etc/ansible - in there have hosts file and ansible.cfg
-ansible hosts = inventory/hosts - when want to communicate with agent, it goes to host and looks for the agent. 
-need to let the hosts know who are the agent 
-want to be able to run a command in controller for one of the agents without having to ssh into the actual agent 
+Once you install ansible, you get the ansible default dir structure
+- ```/etc/ansible``` - in there have hosts file and ansible.cfg
+ansible hosts = when you want to communicate with agent, it goes to host and looks for the agent. so you need to update the host file with details of the agent 
+The aim is to be able to run a command in controller for one of the agents without having to ssh into the actual agent 
 
-open bash
-ssh into controller
-cd /etc/ansible/
-ls [should see hosts file and cfg]
-sudo apt install tree - see directory in tree form
-sudo ansible all -m ping - means all node -m (module) module is ping [ will tell us the host file is empty - so need to inform the host file of the agents]
-ssh vagrant@192.168.33.10 - check if can ssh to web
-password: vagrant 
-sudo apt update - y
-sudo apt upgrade -y
-exit [to go back to the controller]
+### configure the host
+- open bash
+- ssh into controller ¬¬¬vagrant ssh controller```
+- cd /etc/ansible/
+- ls [should see hosts file and cfg]
+- sudo apt install tree - see directory in tree form
+- sudo ansible all -m ping - means all node -m (module) module is ping [ will tell us the host file is empty - so need to inform the host file of the agents]
+- ```ssh vagrant@192.168.33.10``` - check if can ssh to web
+- password: vagrant 
+- update the web vm ```sudo apt update - y```
+- upgrade the web vm ```sudo apt upgrade -y```
+- exit [to go back to the controller]
 
-ssh vagrant@192.168.33.11 - check if can ssh to db
-password: vagrant 
-sudo apt update - y
-sudo apt upgrade -y
-exit [to go back to the controller]
+run the same steps for the db vm:
+- ssh vagrant@192.168.33.11 - check if can ssh to db
+- password: vagrant 
+- sudo apt update - y
+- sudo apt upgrade -y
+- exit [to go back to the controller]
 
-shows we can ssh and we have establised a network
+These steps show that we can ssh and we have establised a network
 
 Need to test if controller can ping the machines
-make sure in /etc/ansible/
-sudo ansible all -m ping - means all node -m (module) module is ping [ will tell us the host file is empty - so need to inform the host file of the agents]
+- make sure in /etc/ansible/
+- ```sudo ansible all -m ping``` - means all node -m (module) module is ping [ will tell us the host file is empty - so need to inform the host file of the agents]
 
-Need to tell controller who agents are
-sudo nano hosts
-create a group name web:
+Need to tell controller who the agents are:
+- ```sudo nano hosts```
+- create a group name web in the hosts file:
 
-[web]
-192.168.33.10
+```[web]
+192.168.33.10 ```
 
-then type exit 
-sudo ansible web -m ping
-will get an error - when ssh use password to authenticate. when we ping we havent provided password or key so get an error. so need to communicate using key or password. to solve it need to provide a way to authtenticate
+- then type exit 
+- sudo ansible web -m ping
+- will get an error - when ssh into a vm we use password to authenticate. when we ping we havent provided password or key, so we get an error. so need to communicate using key or password. to solve it need to provide a way to authtenticate:
 
-sudo nano hosts
-[web]
-192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+- sudo nano hosts
+```[web]
+192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant```
 
-then exit 
+- then exit 
 
-sudo ansible web -m ping
-should get a successful result 
+- ```sudo ansible web -m ping``` [should get a successful result] 
 
-configure for the db vm
-sudo nano hosts
-[web]
-192.168.33.11 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+configure the same way for the db vm: 
+- sudo nano hosts
+```[db]
+192.168.33.11 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant```
 
-need to update the config file and make the following update under [defaults]. sudo nano ansible.cfg, then type this in 
+for this to work, we need to update the config file and make the following update under [defaults]. ```sudo nano ansible.cfg```, then type this in 
 
-host_key_checking = false
+```host_key_checking = false```
+when you run ```sudo ansible all -m ping``` you should get a positive outcome.
 
-sudo ansible all -m ping
+### adhoc commands
+
+You can run linux commands from the controller to the agent.
+
+- ssh into web from the controller vm, run the date command and display in the controller: ```sudo ansible web -a "date"```
+
+- can run the same command on all agents: ```sudo ansible all -a "date"```
+
+- Want to know more about the servers
+```sudo ansible all -a "free"``` tells you how much free space each server has
+
+- say want data transferred to agents but we dont know what is there: ```sudo ansible all -a "ls"```
+
+- to transfer a file from controller to web agent: ``` sudo ansible web -m copy -a "src=/etc/ansible/testing.txt dest=/home/vagrant"```
