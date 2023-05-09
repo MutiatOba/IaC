@@ -169,3 +169,53 @@ pwd
 ```
 <img width="356" alt="image" src="https://github.com/MutiatOba/IaC/assets/118978642/a95fbc51-7e5e-4db6-95e4-3c24ecdacf0b">
 
+Ansible default dir structure
+/etc/ansible - in there have hosts file and ansible.cfg
+ansible hosts = inventory/hosts - when want to communicate with agent, it goes to host and looks for the agent. 
+need to let the hosts know who are the agent 
+want to be able to run a command in controller for one of the agents without having to ssh into the actual agent 
+
+open bash
+ssh into controller
+cd /etc/ansible/
+ls [should see hosts file and cfg]
+sudo apt install tree - see directory in tree form
+sudo ansible all -m ping - means all node -m (module) module is ping [ will tell us the host file is empty - so need to inform the host file of the agents]
+ssh vagrant@192.168.33.10 - check if can ssh to web
+password: vagrant 
+sudo apt update - y
+sudo apt upgrade -y
+exit [to go back to the controller]
+
+ssh vagrant@192.168.33.11 - check if can ssh to db
+password: vagrant 
+sudo apt update - y
+sudo apt upgrade -y
+exit [to go back to the controller]
+
+shows we can ssh and we have establised a network
+
+Need to test if controller can ping the machines
+make sure in /etc/ansible/
+sudo ansible all -m ping - means all node -m (module) module is ping [ will tell us the host file is empty - so need to inform the host file of the agents]
+
+Need to tell controller who agents are
+sudo nano hosts
+create a group name web:
+
+[web]
+192.168.33.10
+
+then type exit 
+sudo ansible web -m ping
+will get an error - when ssh use password to authenticate. when we ping we havent provided password or key so get an error. so need to communicate using key or password. to solve it need to provide a way to authtenticate
+
+sudo nano hosts
+[web]
+192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+
+then exit 
+
+sudo ansible web -m ping
+should get a successful result 
+
