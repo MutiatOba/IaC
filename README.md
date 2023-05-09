@@ -243,3 +243,46 @@ You can run linux commands from the controller to the agent.
 - say want data transferred to agents but we dont know what is there: ```sudo ansible all -a "ls"```
 
 - to transfer a file from controller to web agent: ``` sudo ansible web -m copy -a "src=/etc/ansible/testing.txt dest=/home/vagrant"```
+
+
+iac aims to codify everything and anything. so need to learn YAML and ansible playbooks.
+want to configure a web-server in the web-machine/vm with ssh into the web
+playbook to provide set up instructions/task to do whatever is required
+ensure pwd /etc/ansible
+want to create a playbook, install nginx 
+sudo nano install n-ginx-playbook.yml
+--- to start a file
+
+content of the file:
+```
+# creating a playbook to install nginx in websever
+
+# yaml file starts with ---
+---
+# where would you like to install nginx
+
+- hosts: web
+
+# would you like to see logs
+  gather_facts: yes
+
+# do you need admin access - sudo
+  become: true
+
+# add the instruction - commands
+  tasks:
+  - name: Install nginx in web-server
+
+    apt: pkg=nginx state=present
+# ensure status is running active
+```
+
+to run the command: sudo ansible-playbook install-nginx-playbook.yml
+
+to check nginx is installed on web vm run an adhoc command to check: 
+
+```sudo ansible web -a "systemctl status nginx"```
+
+should be able to type ip for the web vm in browser and see nginx 
+
+playbooks are reusable 
