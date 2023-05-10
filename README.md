@@ -317,3 +317,29 @@ sudo systemctl enable mongodb
 - check that the variable has been created: ```printenv DB_HOST
 - ```cd app```, ```npm install```, ```npm start```
 - type the webip:3000/posts to check that the page is working
+
+### Creating a YAML playbook to update mongodb.conf file
+
+- Ensure you're in the correct folder in the controller vm: ```pwd /etc/ansible```
+
+- To create the playbook: 
+
+```sudo nano mongodb-conf.yml``` and enter the below in the file. note that the file must start with--- 
+
+content of the file:
+
+<img width="237" alt="image" src="https://github.com/MutiatOba/IaC/assets/118978642/a30017fc-c43d-4634-a73c-5b3e60dc9f01">
+
+- to execute the playbook: ```sudo ansible-playbook mongodb-conf.yml```
+- check the status of mongodb ```sudo ansible db -a "systemctl status mongodb"```
+
+### creating a YAML playbook to add env variable to web vm
+
+- to create the playbook: ```sudo nano app-env.yml```
+- content of the file:
+
+<img width="545" alt="image" src="https://github.com/MutiatOba/IaC/assets/118978642/885855ef-96b5-4f52-b3fe-648a06c3c403">
+
+- to execute the playbook: ```sudo ansible-playbook app-env.yml```
+
+to check if the variable is created, ssh into the web vm and type ```printenv DB_HOST```
