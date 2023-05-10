@@ -207,25 +207,26 @@ Need to tell controller who the agents are we do this by updating the hosts file
 - ```sudo nano hosts```
 
 - create a group name web in the hosts file:
-
-```[web]
-192.168.33.10```
+[web]
+192.168.33.10
 
 - then type exit 
 - ```sudo ansible web -m ping``` - this will get an error - when ssh into a vm we use password to authenticate. when we ping we havent provided password or key, so we get an error. so need to communicate using key or password. to solve it need to provide a way to authtenticate:
 
-- ```sudo nano hosts``` - takes us back to hosts file
-```[web]
-192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant```
+- ```sudo nano hosts``` - takes us back to hosts file. input this in the file:
+
+[web]
+192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
 
 - then exit 
 
 - ```sudo ansible web -m ping``` [should get a successful result] 
 
 configure the same way for the db vm: 
-- sudo nano hosts
-```[db]
-192.168.33.11 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant```
+- sudo nano hosts:
+
+[db]
+192.168.33.11 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
 
 for this to work, we need to update the config file and make the following update under [defaults]. ```sudo nano ansible.cfg```, then type this in : ```host_key_checking = false```
 
