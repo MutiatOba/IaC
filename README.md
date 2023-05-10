@@ -1,4 +1,6 @@
-### What is infrastructure as Code (IaC)
+## Infrastructure as Code
+
+### What is infrastructure as Code (IaC)?
 
 Infrastructure as code (IaC) enables you to use code to automate the provisioning and management of infrastructure resources, such as virtual machines, networks, storage, and other components of an IT environment.
 
@@ -42,11 +44,11 @@ The following companies use IaC:
 
 4. Spotify: Spotify uses IaC to manage their cloud infrastructure on Google Cloud Platform (GCP). They use a combination of tools such as Terraform and Kubernetes to automate the deployment and management of their infrastructure.
 
-### What is configuration management 
+### What is configuration management? 
 
 Configuration management aims to ensure that IT infrastructure is reliable, efficient, and secure by providing a consistent and standardised way to manage and track changes. This can help organisations to reduce the risk of downtime, improve system availability, and maintain compliance with regulatory requirements.
 
-### What is ansible and its use cases
+### What is ansible and its use cases?
 
 Ansible is a suite of software tools that enables infrastructure as code. It is open-source and the suite includes software provisioning, configuration management, and application deployment functionality.
 
@@ -80,14 +82,14 @@ YAML stands for "YAML Ain't Markup Language" and it is a human-readable data ser
 
 A playbook in Ansible is a set of instructions that describe the tasks to be performed by Ansible on a group of hosts. Playbooks are written in YAML and contain a series of tasks that are executed in sequence. Each task defines a set of actions to be performed on a specific host or group of hosts. Playbooks can be used to automate the deployment and management of infrastructure resources, as well as the configuration of applications and services.
 
-### Steps to set up Ansible
+### Steps to set up an ansible controller and web and db vms
 
-Need a scrip to launch controller virtual machine.
+You need a scrip to launch the controller virtual machine.
 
 Head over to visual studio code:
 - cd to the relevant folder
-- type vagrant init - which will create a vagrant file
-- update the vagrant file:
+- type ```vagrant init``` - this will create a vagrant file
+- update the vagrant file so it looks as follows:
 ```
 # ansible-tech201
 
@@ -146,10 +148,11 @@ Head over to visual studio code:
  
  end
 ```
+This code will create 3 serparate vms: controller, web and db
 
-- type the following into terminal: ```vagrant up```
+- use ```vagrant up``` to start the vms
 - type ```vagrant status``` - to see if the different vms are running
-- go to gitbash and type: vagrant ssh controller [do this for web and db vms]
+- go to gitbash and cd into the folder where your vagrant file is located and type: ```vagrant ssh controller``` [do this for web and db vms]
 - once you have logged into the vm:
 ```
 sudo apt update -y
@@ -170,18 +173,18 @@ pwd
 <img width="356" alt="image" src="https://github.com/MutiatOba/IaC/assets/118978642/a95fbc51-7e5e-4db6-95e4-3c24ecdacf0b">
 
 Once you install ansible, you get the ansible default dir structure
-- ```/etc/ansible``` - in there have hosts file and ansible.cfg
+- ```/etc/ansible``` - in there you have hosts file and ansible.cfg
 ansible hosts = when you want to communicate with agent, it goes to host and looks for the agent. so you need to update the host file with details of the agent 
 The aim is to be able to run a command in controller for one of the agents without having to ssh into the actual agent 
 
 ### configure the host
 - open bash
-- ssh into controller ¬¬¬vagrant ssh controller```
+- ssh into controller ```vagrant ssh controller```
 - cd /etc/ansible/
 - ls [should see hosts file and cfg]
 - sudo apt install tree - see directory in tree form
 - sudo ansible all -m ping - means all node -m (module) module is ping [ will tell us the host file is empty - so need to inform the host file of the agents]
-- ```ssh vagrant@192.168.33.10``` - check if can ssh to web
+- ```ssh vagrant@192.168.33.10``` - to check if you can ssh to web
 - password: vagrant 
 - update the web vm ```sudo apt update - y```
 - upgrade the web vm ```sudo apt upgrade -y```
@@ -197,22 +200,21 @@ run the same steps for the db vm:
 These steps show that we can ssh and we have establised a network
 
 Need to test if controller can ping the machines
-- make sure in /etc/ansible/
+- make sure in /etc/ansible/ folder
 - ```sudo ansible all -m ping``` - means all node -m (module) module is ping [ will tell us the host file is empty - so need to inform the host file of the agents]
 
-Need to tell controller who the agents are:
+Need to tell controller who the agents are we do this by updating the hosts file:
 - ```sudo nano hosts```
 
 - create a group name web in the hosts file:
 
-[web]
-192.168.33.10
+```[web]
+192.168.33.10```
 
 - then type exit 
-- sudo ansible web -m ping
-- will get an error - when ssh into a vm we use password to authenticate. when we ping we havent provided password or key, so we get an error. so need to communicate using key or password. to solve it need to provide a way to authtenticate:
+- ```sudo ansible web -m ping``` - this will get an error - when ssh into a vm we use password to authenticate. when we ping we havent provided password or key, so we get an error. so need to communicate using key or password. to solve it need to provide a way to authtenticate:
 
-- sudo nano hosts
+- ```sudo nano hosts``` - takes us back to hosts file
 ```[web]
 192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant```
 
@@ -225,21 +227,20 @@ configure the same way for the db vm:
 ```[db]
 192.168.33.11 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant```
 
-for this to work, we need to update the config file and make the following update under [defaults]. ```sudo nano ansible.cfg```, then type this in 
+for this to work, we need to update the config file and make the following update under [defaults]. ```sudo nano ansible.cfg```, then type this in : ```host_key_checking = false```
 
-```host_key_checking = false```
 when you run ```sudo ansible all -m ping``` you should get a positive outcome.
 
 ### adhoc commands
 
 You can run linux commands from the controller to the agent.
 
-- ssh into web from the controller vm, run the date command and display in the controller: ```sudo ansible web -a "date"```
+- ssh into web from the controller vm, run the date command and display result in the controller: ```sudo ansible web -a "date"```
 
 - can run the same command on all agents: ```sudo ansible all -a "date"```
 
 - Want to know more about the servers
-```sudo ansible all -a "free"``` tells you how much free space each server has
+```sudo ansible all -a "free"``` - this tells you how much free space each server has
 
 - say want data transferred to agents but we dont know what is there: ```sudo ansible all -a "ls"```
 
