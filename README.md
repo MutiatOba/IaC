@@ -247,26 +247,26 @@ You can run linux commands from the controller to the agent.
 
 - to transfer a file from controller to web agent: ``` sudo ansible web -m copy -a "src=/etc/ansible/testing.txt dest=/home/vagrant"```
 
+### Creating a YAML playbook
 
-iac aims to codify everything and anything. so need to learn YAML and ansible playbooks.
-want to configure a web-server in the web-machine/vm with ssh into the web
-playbook to provide set up instructions/task to do whatever is required
-ensure pwd /etc/ansible
-want to create a playbook, install nginx 
-sudo nano install n-ginx-playbook.yml
---- to start a file
+- Ensure you're in the correct folder in the controller vvm: ```pwd /etc/ansible```
+
+Aim is to create a playbook which installs nginx in the web vm: 
+
+- ```sudo nano install n-ginx-playbook.yml``` and enter the below in the file. note that the file must start with--- 
 
 content of the file:
 
 <img width="338" alt="image" src="https://github.com/MutiatOba/IaC/assets/118978642/21000d70-7d66-4f4c-b2d0-7cb2969c3917">
 
+- to execute the playbook: ```sudo ansible-playbook install-nginx-playbook.yml```
 
-to run the command: sudo ansible-playbook install-nginx-playbook.yml
-
-to check nginx is installed on web vm run an adhoc command to check: 
+- to check nginx is installed on web vm run an adhoc command to check: 
 
 ```sudo ansible web -a "systemctl status nginx"```
 
-should be able to type ip for the web vm in browser and see nginx 
+should be able to type the ip for the web vm in browser and see nginx 
 
 playbooks are reusable 
+
+
