@@ -204,8 +204,8 @@ Need to tell controller who the agents are:
 - ```sudo nano hosts```
 - create a group name web in the hosts file:
 
-```[web]
-192.168.33.10 ```
+[web]
+192.168.33.10
 
 - then type exit 
 - sudo ansible web -m ping
