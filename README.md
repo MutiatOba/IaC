@@ -301,4 +301,19 @@ content of the file:
 - to execute the playbook: ```sudo ansible-playbook mongodb-playbook.yml```
 - check the status of mongodb ```sudo ansible db -a "systemctl status mongodb"```
 
+### Connecting the web vm to db vm
 
+- from the controller vm, ssh to the db vm: ```ssh vagrant@192.168.33.11```
+- edit the configutation file to change bindip address to 0.0.0.0: ```sudo nano /etc/mongod.conf```
+- restart and enable mongodb to incorporate the changes:
+
+```
+sudo systemctl restart mongodb
+sudo systemctl enable mongodb
+```
+- check that this has all be updated: ```sudo systemctl status mongodb```
+- exit the db vm and ssh into the web vm
+- type: ```export DB_HOST=mongodb://192.168.33.11:27017/posts``` to create enviroment variable to connect to db
+- check that the variable has been created: ```printenv DB_HOST
+- ```cd app```, ```npm install```, ```npm start```
+- type the webip:3000/posts to check that the page is working
