@@ -249,7 +249,7 @@ You can run linux commands from the controller to the agent.
 
 ### Creating a YAML playbook
 
-- Ensure you're in the correct folder in the controller vvm: ```pwd /etc/ansible```
+- Ensure you're in the correct folder in the controller vm: ```pwd /etc/ansible```
 
 Aim is to create a playbook which installs nginx in the web vm: 
 
@@ -269,4 +269,18 @@ should be able to type the ip for the web vm in browser and see nginx
 
 playbooks are reusable 
 
+### Creating a YAML playbook to install node.js on web vm
 
+- Ensure you're in the correct folder in the controller vm: ```pwd /etc/ansible```
+
+Aim is to create a playbook which installs nginx in the web vm: 
+
+- ```sudo nano install n-ginx-playbook.yml``` and enter the below in the file. note that the file must start with--- 
+
+content of the file:
+<img width="300" alt="image" src="https://github.com/MutiatOba/IaC/assets/118978642/c07c8c19-3387-4f93-8110-9aa5710762b8">
+
+- to copy the app folder from your local machine to the web vm type: ```scp -r /c/Users/cex/Documents/tech221_test/app vagrant@192.168.33.10:/home/vagrant```
+- from the controller vm, ssh into the web vm: ```ssh vagrant@192.168.33.10```, ```cd app``` and then ```npm install``` followed by ```npm start````
+
+- you should be able to use the web vm ip address:3000 to view the app in the web browser
