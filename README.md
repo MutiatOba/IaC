@@ -202,6 +202,7 @@ Need to test if controller can ping the machines
 
 Need to tell controller who the agents are:
 - ```sudo nano hosts```
+
 - create a group name web in the hosts file:
 
 [web]
